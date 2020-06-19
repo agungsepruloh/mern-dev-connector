@@ -110,7 +110,7 @@ router.post(
 	}
 );
 
-// @route   Get api/profile
+// @route   GET api/profile
 // @desc    Get all profiles
 // @access  Public
 router.get("/", async (req, res) => {
@@ -123,7 +123,7 @@ router.get("/", async (req, res) => {
 	}
 });
 
-// @route   Get api/profile/user/:user_id
+// @route   GET api/profile/user/:user_id
 // @desc    Get profile by user ID
 // @access  Public
 router.get("/user/:user_id", async (req, res) => {
@@ -143,6 +143,25 @@ router.get("/user/:user_id", async (req, res) => {
 			});
 		}
 
+		res.status(500).send("Server Error");
+	}
+});
+
+// @route   DELETE   api/profile
+// @desc    Delete profile, user & posts
+// @access  Private
+router.delete("/", auth, async (req, res) => {
+	try {
+		// TODO: Remove posts
+
+		// Remove profile
+		await Profile.findOneAndRemove({ user: req.user.id });
+		// Remove user
+		await User.findOneAndRemove({ _id: req.user.id });
+
+		return res.json({ msg: "User deleted" });
+	} catch (err) {
+		console.log(err.message);
 		res.status(500).send("Server Error");
 	}
 });
