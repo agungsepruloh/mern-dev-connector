@@ -147,7 +147,7 @@ router.get("/user/:user_id", async (req, res) => {
 	}
 });
 
-// @route   DELETE   api/profile
+// @route   DELETE api/profile
 // @desc    Delete profile, user & posts
 // @access  Private
 router.delete("/", auth, async (req, res) => {
@@ -166,7 +166,7 @@ router.delete("/", auth, async (req, res) => {
 	}
 });
 
-// @route   PUT   api/profile/experience
+// @route   PUT api/profile/experience
 // @desc    Add profile exprerience
 // @access  Private
 router.put(
@@ -219,5 +219,28 @@ router.put(
 		}
 	}
 );
+
+// @route   DELETE api/profile/experience/:exp_id
+// @desc    Delete profile exprerience
+// @access  Private
+router.delete("/experience/:exp_id", auth, async (req, res) => {
+	try {
+		const profile = await Profile.findOne({ user: req.user.id });
+
+		if (!profile) return res.status(400).json({ msg: "Profile not found" });
+
+		// Get remove index
+		const removeIndex = profile.experience
+			.map((item) => item.id)
+			.indexOf(req.params.exp_id);
+
+		profile.experience.splice(removeIndex, 1);
+		await profile.save();
+		return res.json(profile);
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("Server Error");
+	}
+});
 
 module.exports = router;
