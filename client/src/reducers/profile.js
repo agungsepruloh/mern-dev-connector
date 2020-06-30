@@ -25,7 +25,7 @@ export default function (state = initialState, action) {
 		case GET_PROFILES:
 			return { ...state, profiles: payload, loading: false };
 		case PROFILE_ERROR:
-			return { ...state, error: payload, loading: false };
+			return { ...state, profile: null, error: payload, loading: false };
 		case CLEAR_PROFILE:
 			return { ...state, profile: null, repos: [], loading: false };
 		case GET_REPOS:
