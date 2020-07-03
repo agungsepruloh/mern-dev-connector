@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addPost } from "../../actions/post";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const PostForm = ({ addPost }) => {
 	const [text, setText] = useState("");
@@ -18,15 +20,14 @@ const PostForm = ({ addPost }) => {
 				<h3>Say Something...</h3>
 			</div>
 			<form onSubmit={(e) => onSubmit(e)} className="form my-1">
-				<textarea
+				<CKEditor
 					name="text"
-					cols="30"
-					rows="5"
-					placeholder="Create a post"
-					value={text}
-					onChange={(e) => setText(e.target.value)}
-					required
-				></textarea>
+					editor={ClassicEditor}
+					data={text}
+					onChange={(event, editor) => {
+						setText(editor.getData());
+					}}
+				/>
 				<input type="submit" className="btn btn-dark my-1" value="Submit" />
 			</form>
 		</div>
